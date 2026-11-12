@@ -49,14 +49,22 @@ def main():
 if __name__=="__main__":
     main()"""
 
-from app.services.tool_service import research_with_search
+from app.services.tool_service import research_with_tools
 
 def main():
-    query=input("What would you like to search")
-    print("Researching...")
-    result=research_with_search(query)
-    print("Research Assistant")
-    print(result)
+    print("AI research assistant")
+    while True:
+          query=input("What would you like to search")
+          if query.lower()=='exit':
+               break
+          try:
+              result=research_with_tools(query)
+              print("Researching...")
+  
+              print(result)
+
+          except Exception as error:
+              print(f"\nSomething went wrong:{error}")
 
 if __name__=="__main__":
     main()
