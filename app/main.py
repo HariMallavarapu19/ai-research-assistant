@@ -36,7 +36,7 @@ def main():
 
 
 if __name__=="__main__":
-    main()"""
+    main()
 
 from app.services.search_service import search_web
 
@@ -45,6 +45,18 @@ def main():
     print("Searching the web")
     results=search_web(query)
     print(results)
+
+if __name__=="__main__":
+    main()"""
+
+from app.services.tool_service import research_with_search
+
+def main():
+    query=input("What would you like to search")
+    print("Researching...")
+    result=research_with_search(query)
+    print("Research Assistant")
+    print(result)
 
 if __name__=="__main__":
     main()
