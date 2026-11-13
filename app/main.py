@@ -47,7 +47,7 @@ def main():
     print(results)
 
 if __name__=="__main__":
-    main()"""
+    main()
 
 from app.services.tool_service import research_with_tools
 
@@ -67,4 +67,25 @@ def main():
               print(f"\nSomething went wrong:{error}")
 
 if __name__=="__main__":
+    main()"""
+
+from app.agents.research_agent import run_research_agent
+
+def main():
+    print("AI Research Assistant-Agent Mode")
+    while True:
+        query=input("\n Ask you question(or type exit)")
+        if query.lower()=="exit":
+            print("GOOD BYE")
+            break
+        try:
+            result=run_research_agent(query)
+            print("\nResearch Assistant:")
+            print(result)
+
+        except Exception as error:
+            print(f"\n Something went wrong:{error}")
+
+if __name__=="__main__":
     main()
+
