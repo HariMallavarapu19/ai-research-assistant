@@ -38,4 +38,10 @@ def response_node(state:ResearchState):
     }
 
     
+def no_results_node(state:ResearchState):
+    print("\nExecuting No Results Node")
 
+    return {
+        "final_answer":(
+        "Sorry no research Results were found for your question")
+    }
