@@ -1,0 +1,30 @@
+[
+    {
+        "id": "EVAL-001",
+        "question": "What is 250 multiplied by 48?",
+        "expected_answer": "12000",
+        "expected_tool": "calculator",
+        "category": "calculation"
+    },
+    {
+        "id": "EVAL-002",
+        "question": "Who developed Python?",
+        "expected_answer": "Guido van Rossum",
+        "expected_tool": "wikipedia_search",
+        "category": "general_knowledge"
+    },
+    {
+        "id": "EVAL-003",
+        "question": "What is 25 multiplied by 4?",
+        "expected_answer": "100",
+        "expected_tool": "calculator",
+        "category": "calculation"
+    },
+    {
+        "id": "EVAL-004",
+        "question": "What are the latest developments in artificial intelligence?",
+        "expected_answer": "A summary of recent AI developments supported by current web sources",
+        "expected_tool": "tavily_search",
+        "category": "current_information"
+    }
+]
