@@ -1,27 +1,37 @@
-
-from mcp import Client,StdioServerParameters
 import asyncio
 
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+
+
 async def main():
-    server_params=StdioServerParameters(
+
+    server_params = StdioServerParameters(
         command="python",
-        args=['mcp_servers/basic_server.py']
+        args=["mcp_servers/basic_server.py"],
     )
 
-    async with Client(server_params) as client:
-        tools=await client.list_tools()
-        print("Available tools")
+    async with stdio_client(server_params) as (read_stream, write_stream):
 
-        for tool in tools.tools:
-            print(f"-{tool.name}:{tool.description}")
+        async with ClientSession(read_stream, write_stream) as session:
 
-        result=await client.call_tool(
-            "add_numbers",{"a":10,'b':20}
-        )
+            await session.initialize()
 
-        print("\nTool result")
-        print(result)
+            tools_result = await session.list_tools()
+
+            print("Available tools:")
+
+            for tool in tools_result.tools:
+                print(f"- {tool.name}: {tool.description}")
+
+            result = await session.call_tool(
+                "add_numbers",
+                arguments={"a": 10, "b": 20},
+            )
+
+            print("\nTool result:")
+            print(result)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     asyncio.run(main())

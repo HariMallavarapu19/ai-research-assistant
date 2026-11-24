@@ -1,6 +1,6 @@
-from mcp.server.mcpserver import MCPServer
+from mcp.server.fastmcp import FastMCP
 
-mcp=MCPServer("BasicServer")
+mcp=FastMCP("BasicServer")
 
 @mcp.tool()
 def add_numbers(a:int,b:int)->int:
