@@ -7,14 +7,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain.agents import create_agent
 from app.core.llm import get_llm
+from app.core.config import settings
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(message)s"
 )
+
 logger=logging.getLogger(__name__)
-
-
+ 
 async def main():
     github_token=os.environ.get("GITHUB_PERSONAL_ACCESS_TOKEN")
     if not github_token:
@@ -43,23 +44,40 @@ async def main():
         }
     )
 
+
     max_retires=3
 
     for attempt in range(1,max_retires+1):
         try:
             logger.info("Attempt %s to load GitHub tools",attempt)
-            tools=await asyncio.wait_for(
+            all_tools=await asyncio.wait_for(
                 client.get_tools(),
                 timeout=30
             )
+            READ_ONLY_TOOLS = {
+                  "search_repositories",
+                  "get_file_contents",
+                  "list_commits",
+                  "get_issue",
+            }
+
+            WRITE_TOOLS = {
+                  "create_issue",
+                  "push_files",
+                  "create_pull_request",
+            }
+
+            ALLOWED_TOOLS = READ_ONLY_TOOLS
 
             tools=[
-                tool for tool in tools
-                if tool.name=="search_repositories"
+                tool for tool in all_tools
+                if tool.name in ALLOWED_TOOLS
             ]
-
+            
             logger.info("loaded %s Github mcp tools",len(tools))
+            logger.info("Allowed tools:%s",[tool.name for tool in tools])
             break
+
         except asyncio.TimeoutError:
             logger.warning("Tool loading timeout on attempt %s",attempt)
 
@@ -112,7 +130,7 @@ If you cannot verify the repository, clearly say so.
     print('\n--Agent Responnse----')
 
     for message in response['messages']:
-        print("Message type:{type(message).__name__}")
+        print(f"Message type:{type(message).__name__}")
         print(f"Content:{message.content}")
 
         if hasattr(message,"tool_calls") and message.tool_calls:
